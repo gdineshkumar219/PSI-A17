@@ -8,19 +8,19 @@ static class Start {
       var dict = new Dictionary<string, int> () { ["five"] = 5, ["two"] = 2 };
       var sb = node.Accept (new ExprILGen ());
       var et = new ExprTyper ();
-      var expr = new ExprEvaluator(dict);
+      var expr = new ExprEvaluator (dict);
       if (node.Accept (et) != NType.Error) {
          if (node.Accept (et) is NType.Bool) {
             bool result = node.Accept (expr) == 1;
             Console.WriteLine (result);
          } else {
             int value = node.Accept (expr);
-            Console.WriteLine ($"Value(else) = {value}");
+            Console.WriteLine ($"Value = {value}");
          }
          ExprGrapher newGraph = new ();
          _ = node.Accept (newGraph);
          string filePath = "../Parser/Data/output.html";
-         newGraph.WriteToHtmlFile (Expr0,filePath);
+         newGraph.WriteToHtmlFile (Expr0, filePath);
          Console.WriteLine ("\nGenerated code: ");
          Console.WriteLine (sb);
       } else Console.WriteLine ("Input a proper expression");
