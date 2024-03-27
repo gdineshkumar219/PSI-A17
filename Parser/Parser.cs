@@ -10,9 +10,29 @@ class Parser {
    public NExpr Parse () => Expression ();
 
    // Implementation --------------------------------------
-   // expression = term .
-   NExpr Expression () 
-      => Term ();
+   // expression = equality .
+   NExpr Expression ()
+      => Equality ();
+
+   // equality = comparison[("=" | "<>") comparison] .
+   NExpr Equality () {
+      var expr = Comparison ();
+      while (Match (NEQ, EQ)) {
+         var op = mPrevious;
+         expr = new NBinary (expr, op, Comparison ());
+      }
+      return expr;
+   }
+
+   // comparison = term[("<" | "<=" | ">" | ">=") term] .
+   NExpr Comparison () {
+      var expr = Term ();
+      while (Match (LEQ, GEQ, EQ, LT, GT)) {
+         var op = mPrevious;
+         expr = new NBinary (expr, op, Term ());
+      }
+      return expr;
+   }
 
    // term = factor { ("+" | "-") factor } .
    NExpr Term () {
