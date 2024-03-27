@@ -11,17 +11,9 @@ class ExprTyper : Visitor<NType> {
       return literal.Type;
    }
 
-   public override NType Visit (NIdentifier identifier) {
-      return identifier.Type = Int;
-   }
+   public override NType Visit (NIdentifier identifier) => identifier.Type = Int;
 
-   public override NType Visit (NUnary unary) {
-      NType exprType = unary.Expr.Accept (this);
-      return unary.Op.Text switch {
-         "-" => exprType == Int || exprType == Real ? exprType : Error,
-         _ => Error,
-      };
-   }
+   public override NType Visit (NUnary unary) => unary.Type = unary.Expr.Accept (this);
 
    public override NType Visit (NBinary binary) {
       NType a = binary.Left.Accept (this);

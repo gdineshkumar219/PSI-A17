@@ -6,21 +6,21 @@ class ExprGrapher : Visitor<int> {
    int mID = 0;
    public override int Visit (NLiteral literal) {
       string nodeId = $"id{++mID}";
-      mSB.AppendLine ($"    {nodeId}[{literal.Value.Text}]");
+      mSB.AppendLine ($"    {nodeId}[{literal.Value.Text},{literal.Type}]");
       return mID;
    }
 
    public override int Visit (NIdentifier identifier) {
       string nodeId = $"id{++mID}";
-      mSB.AppendLine ($"    {nodeId}[{identifier.Name.Text}]");
+      mSB.AppendLine ($"    {nodeId}[{identifier.Name.Text},{identifier.Type}]");
       return mID;
    }
 
    public override int Visit (NUnary unary) {
       var exprGraph = unary.Expr.Accept (this).ToString ();
-      var unaryOp = unary.Op.Kind == Token.E.SUB ? "([-])" : $"([?])";
+     // var unaryOp = unary.Op.Kind == Token.E.SUB ? $"([-,{unary.Type}])" : $"([?])";
       string nodeId = $"id{++mID}";
-      mSB.Append ($"    {nodeId}{unaryOp}");
+      mSB.Append ($"    {nodeId}([{unary.Op.Text},{unary.Type}])");
       mSB.AppendLine ($"; {nodeId} --> id{exprGraph}");
       return mID;
    }
@@ -29,7 +29,7 @@ class ExprGrapher : Visitor<int> {
       var leftGraph = binary.Left.Accept (this).ToString ();
       var rightGraph = binary.Right.Accept (this).ToString ();
       string nodeId = $"id{++mID}";
-      mSB.Append ($"    {nodeId}([{binary.Op.Text}])");
+      mSB.Append ($"    {nodeId}([{binary.Op.Text},{binary.Type}])");
       mSB.Append ($"; {nodeId} --> id{leftGraph}");
       mSB.AppendLine ($"; {nodeId} --> id{rightGraph}");
       return mID;

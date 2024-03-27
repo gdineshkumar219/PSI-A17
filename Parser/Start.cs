@@ -15,7 +15,7 @@ static class Start {
             Console.WriteLine (result);
          } else {
             int value = node.Accept (expr);
-            Console.WriteLine ($"Value(else) = {value}");
+            Console.WriteLine ($"Value = {value}");
          }
          ExprGrapher newGraph = new ();
          _ = node.Accept (newGraph);
